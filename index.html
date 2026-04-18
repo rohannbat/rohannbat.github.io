@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rohan Batra</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --accent: #00ff88;
+      --accent-dim: #00ff8820;
+      --text: #e8e8e8;
+      --muted: #555;
+      --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Noise overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+    .nav-logo span { color: var(--muted); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Sections ── */
+    section { padding: 7rem 2rem; max-width: 860px; margin: 0 auto; }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 6rem;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 3rem;
+      line-height: 1.7;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 500; }
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border: 1px solid var(--accent);
+      font-weight: 600;
+    }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 2rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      animation: fadeInUp 1s 1.5s both;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* ── Section labels ── */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      max-width: 200px;
+    }
+    h2 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── About ── */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-text p {
+      color: #aaa;
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+    .about-text p strong { color: var(--text); }
+    .about-avatar {
+      position: relative;
+    }
+    .avatar-box {
+      width: 160px;
+      height: 160px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .avatar-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent-dim), transparent);
+    }
+    .avatar-box::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 40px; height: 40px;
+      border-bottom: 2px solid var(--accent);
+      border-right: 2px solid var(--accent);
+      border-radius: 0 0 8px 0;
+    }
+
+    /* ── Skills ── */
+    #skills .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .skill-card {
+      background: var(--surface);
+      padding: 1.5rem;
+      transition: background 0.2s;
+    }
+    .skill-card:hover { background: #161616; }
+    .skill-card-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+    .skill-card h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.75rem;
+    }
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.2rem 0.55rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Projects ── */
+    #projects .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .project-item {
+      background: var(--surface);
+      padding: 1.75rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .project-item:hover { background: #141414; }
+    .project-item:hover .project-arrow { color: var(--accent); transform: translate(2px, -2px); }
+    .project-number {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .project-item h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .project-item p {
+      font-size: 0.85rem;
+      color: #777;
+      line-height: 1.6;
+      max-width: 520px;
+    }
+    .project-meta {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .project-arrow {
+      color: var(--muted);
+      font-size: 1rem;
+      transition: all 0.2s;
+      margin-top: 0.2rem;
+    }
+
+    /* ── Contact ── */
+    #contact { text-align: center; }
+    #contact h2 { margin-bottom: 1rem; }
+    #contact p {
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+    }
+    footer p {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    footer span { color: var(--accent); }
+
+    /* ── Cursor blink ── */
+    .blink {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── Fade-in on scroll ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ── Terminal block ── */
+    .terminal {
+      background: #0d0d0d;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #888;
+      margin-top: 2rem;
+      line-height: 1.9;
+    }
+    .terminal .prompt { color: var(--accent); }
+    .terminal .cmd { color: var(--text); }
+    .terminal .out { color: #555; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      nav { padding: 1rem; }
+      .nav-links { display: none; }
+      #about .about-grid { grid-template-columns: 1fr; }
+      .about-avatar { display: none; }
+      section { padding: 5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav id="nav">
+    <div class="nav-logo"><span>~/</span>rohanbatra</div>
+    <ul class="nav-links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <p class="hero-eyebrow">available for collaboration</p>
+    <h1>Rohan<br>Batra<span class="blink"></span></h1>
+    <p class="hero-sub">
+      <strong>Security Analyst at BankVic.</strong> I protect systems by day and
+      build things that interest me by night — mobile apps, security tooling,
+      and whatever else seems worth making.
+    </p>
+    <div class="cta-row">
+      <a href="#projects" class="btn btn-primary">view my work →</a>
+      <a href="#contact" class="btn btn-ghost">get in touch</a>
+    </div>
+    <div class="scroll-hint">scroll</div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <p class="section-label reveal">01 — ABOUT</p>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <h2>I secure systems.<br>I build software.</h2>
+        <p>
+          I'm a <strong>Security Analyst at BankVic</strong>, where I work on
+          protecting financial systems and infrastructure. Security isn't just
+          my job — it's the lens through which I approach everything I build.
+        </p>
+        <p>
+          Outside of defensive security work, I build software — mostly mobile
+          apps with React Native and Expo, but I'm always picking up new tools.
+          I care about <strong>clean architecture, minimal interfaces,</strong>
+          and code that does exactly what it needs to do.
+        </p>
+        <p>
+          Based in <strong>Melbourne, Australia.</strong>
+        </p>
+        <div class="terminal">
+          <div><span class="prompt">$ </span><span class="cmd">whoami</span></div>
+          <div class="out">rohan batra — security analyst &amp; builder</div>
+          <div><span class="prompt">$ </span><span class="cmd">cat interests.txt</span></div>
+          <div class="out">offensive security, mobile dev, automation, clean design</div>
+          <div><span class="prompt">$ </span><span class="cmd">echo $LOCATION</span></div>
+          <div class="out">Melbourne, AU</div>
+        </div>
+      </div>
+      <div class="about-avatar">
+        <div class="avatar-box">RB</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <p class="section-label reveal">02 — SKILLS</p>
+    <h2 class="reveal">What I work with</h2>
+    <div class="skills-grid reveal">
+      <div class="skill-card">
+        <div class="skill-card-icon">🔐</div>
+        <h3>Security</h3>
+        <p style="font-size:0.82rem; color:#666; line-height:1.6;">Threat analysis, vulnerability management, incident response, security architecture.</p>
+        <div class="skill-tags">
+          <span class="tag">SIEM</span>
+          <span class="tag">Pen Testing</span>
+          <span class="tag">OSINT</span>
+          <span class="tag">Splunk</span>
+          <span class="tag">Burp Suite</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">📱</div>
+        <h3>Mobile Dev</h3>
+        <p style="font-size:0.82rem; color:#666; line-height:1.6;">Building cross-platform mobile apps with a focus on good UX and secure backends.</p>
+        <div class="skill-tags">
+          <span class="tag">React Native</span>
+          <span class="tag">Expo</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Supabase</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">⚙️</div>
+        <h3>Backend & Tooling</h3>
+        <p style="font-size:0.82rem; color:#666; line-height:1.6;">Scripting, automation, and building tools that make security work faster.</p>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Bash</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag">Docker</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-icon">☁️</div>
+        <h3>Infrastructure</h3>
+        <p style="font-size:0.82rem; color:#666; line-height:1.6;">Cloud security, network architecture, and keeping things locked down.</p>
+        <div class="skill-tags">
+          <span class="tag">AWS</span>
+          <span class="tag">Networking</span>
+          <span class="tag">Linux</span>
+          <span class="tag">IAM</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <p class="section-label reveal">03 — PROJECTS</p>
+    <h2 class="reveal">Things I've built</h2>
+    <div class="projects-list reveal">
+
+      <a href="https://github.com/rohannbat" target="_blank" class="project-item">
+        <div>
+          <p class="project-number">01</p>
+          <h3>Vibe to Meal</h3>
+          <p>A mobile app that recommends meals based on your current vibe. Built with Expo, React Native, and Supabase.</p>
+          <div class="project-meta">
+            <span class="tag">React Native</span>
+            <span class="tag">Expo</span>
+            <span class="tag">Supabase</span>
+          </div>
+        </div>
+        <span class="project-arrow">↗</span>
+      </a>
+
+      <a href="https://github.com/rohannbat/PhishAI" target="_blank" class="project-item">
+        <div>
+          <p class="project-number">02</p>
+          <h3>AI Phish Detector</h3>
+          <p>A tool that uses machine learning to detect phishing emails and URLs. Built to assist SOC analysts in triage.</p>
+          <div class="project-meta">
+            <span class="tag">Python</span>
+            <span class="tag">ML</span>
+            <span class="tag">Security</span>
+          </div>
+        </div>
+        <span class="project-arrow">↗</span>
+      </a>
+
+      <a href="https://github.com/rohannbat" target="_blank" class="project-item">
+        <div>
+          <p class="project-number">03</p>
+          <h3>Options Trade Tracker</h3>
+          <p>A personal trading dashboard for tracking options positions, P&amp;L, and portfolio analytics in real-time.</p>
+          <div class="project-meta">
+            <span class="tag">Python</span>
+            <span class="tag">Finance</span>
+            <span class="tag">Dashboard</span>
+          </div>
+        </div>
+        <span class="project-arrow">↗</span>
+      </a>
+
+      <a href="https://github.com/rohannbat/IP_reputation_scanner" target="_blank" class="project-item">
+        <div>
+          <p class="project-number">04</p>
+          <h3>IP Intel Checker</h3>
+          <p>Quick IP reputation and geolocation lookup tool for threat hunting and analyst workflows.</p>
+          <div class="project-meta">
+            <span class="tag">Python</span>
+            <span class="tag">OSINT</span>
+            <span class="tag">Threat Intel</span>
+          </div>
+        </div>
+        <span class="project-arrow">↗</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <p class="section-label reveal" style="justify-content:center;">04 — CONTACT</p>
+    <h2 class="reveal">Let's talk</h2>
+    <p class="reveal">Whether it's a security question, a project idea, or just a chat — my inbox is open.</p>
+    <div class="contact-links reveal">
+      <a href="mailto:youvereachedrohan@gmail.com" class="btn btn-primary">youvereachedrohan@gmail.com</a>
+      <a href="https://github.com/rohannbat" class="btn btn-ghost" target="_blank">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/rohan-batra-3142b9239/" class="btn btn-ghost" target="_blank">LinkedIn ↗</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>designed &amp; built by <span>rohan batra</span> · 2026</p>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.12 }
+    );
+    reveals.forEach(el => observer.observe(el));
+
+    // Hero typing animation
+    const heroName = document.querySelector('h1');
+    heroName.style.animation = 'fadeInUp 0.8s ease both';
+
+    // Smooth active nav link highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 200) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--text)' : '';
+      });
+    });
+  </script>
+</body>
+</html>

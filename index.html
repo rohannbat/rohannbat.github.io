@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rohan Batra</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' mailto:">
+  <meta name="referrer" content="no-referrer">
   <style>
     :root {
       --bg: #0a0a0a;
@@ -416,6 +418,8 @@
     .terminal .prompt { color: var(--accent); }
     .terminal .cmd { color: var(--text); }
     .terminal .out { color: #555; }
+    .skill-desc { font-size: 0.82rem; color: #666; line-height: 1.6; }
+    .contact-label { justify-content: center; }
 
     /* ── Responsive ── */
     @media (max-width: 640px) {
@@ -499,7 +503,7 @@
       <div class="skill-card">
         <div class="skill-card-icon">🔐</div>
         <h3>Security</h3>
-        <p style="font-size:0.82rem; color:#666; line-height:1.6;">Threat analysis, vulnerability management, incident response, security architecture.</p>
+        <p class="skill-desc">Threat analysis, vulnerability management, incident response, security architecture.</p>
         <div class="skill-tags">
           <span class="tag">SIEM</span>
           <span class="tag">Pen Testing</span>
@@ -511,7 +515,7 @@
       <div class="skill-card">
         <div class="skill-card-icon">📱</div>
         <h3>Mobile Dev</h3>
-        <p style="font-size:0.82rem; color:#666; line-height:1.6;">Building cross-platform mobile apps with a focus on good UX and secure backends.</p>
+        <p class="skill-desc">Building cross-platform mobile apps with a focus on good UX and secure backends.</p>
         <div class="skill-tags">
           <span class="tag">React Native</span>
           <span class="tag">Expo</span>
@@ -522,7 +526,7 @@
       <div class="skill-card">
         <div class="skill-card-icon">⚙️</div>
         <h3>Backend & Tooling</h3>
-        <p style="font-size:0.82rem; color:#666; line-height:1.6;">Scripting, automation, and building tools that make security work faster.</p>
+        <p class="skill-desc">Scripting, automation, and building tools that make security work faster.</p>
         <div class="skill-tags">
           <span class="tag">Python</span>
           <span class="tag">Bash</span>
@@ -533,7 +537,7 @@
       <div class="skill-card">
         <div class="skill-card-icon">☁️</div>
         <h3>Infrastructure</h3>
-        <p style="font-size:0.82rem; color:#666; line-height:1.6;">Cloud security, network architecture, and keeping things locked down.</p>
+        <p class="skill-desc">Cloud security, network architecture, and keeping things locked down.</p>
         <div class="skill-tags">
           <span class="tag">AWS</span>
           <span class="tag">Networking</span>
@@ -550,7 +554,7 @@
     <h2 class="reveal">Things I've built</h2>
     <div class="projects-list reveal">
 
-      <a href="https://github.com/rohannbat" target="_blank" class="project-item">
+      <a href="https://github.com/rohannbat" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="project-item">
         <div>
           <p class="project-number">01</p>
           <h3>Vibe to Meal</h3>
@@ -564,7 +568,7 @@
         <span class="project-arrow">↗</span>
       </a>
 
-      <a href="https://github.com/rohannbat/PhishAI" target="_blank" class="project-item">
+      <a href="https://github.com/rohannbat/PhishAI" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="project-item">
         <div>
           <p class="project-number">02</p>
           <h3>AI Phish Detector</h3>
@@ -578,7 +582,7 @@
         <span class="project-arrow">↗</span>
       </a>
 
-      <a href="https://github.com/rohannbat" target="_blank" class="project-item">
+      <a href="https://github.com/rohannbat" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="project-item">
         <div>
           <p class="project-number">03</p>
           <h3>Options Trade Tracker</h3>
@@ -592,7 +596,7 @@
         <span class="project-arrow">↗</span>
       </a>
 
-      <a href="https://github.com/rohannbat/IP_reputation_scanner" target="_blank" class="project-item">
+      <a href="https://github.com/rohannbat/IP_reputation_scanner" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" class="project-item">
         <div>
           <p class="project-number">04</p>
           <h3>IP Intel Checker</h3>
@@ -611,13 +615,13 @@
 
   <!-- Contact -->
   <section id="contact">
-    <p class="section-label reveal" style="justify-content:center;">04 — CONTACT</p>
+    <p class="section-label contact-label reveal">04 — CONTACT</p>
     <h2 class="reveal">Let's talk</h2>
     <p class="reveal">Whether it's a security question, a project idea, or just a chat — my inbox is open.</p>
     <div class="contact-links reveal">
       <a href="mailto:youvereachedrohan@gmail.com" class="btn btn-primary">Email me →</a>
-      <a href="https://github.com/rohannbat" class="btn btn-ghost" target="_blank">GitHub ↗</a>
-      <a href="https://www.linkedin.com/in/rohan-batra-3142b9239/" class="btn btn-ghost" target="_blank">LinkedIn ↗</a>
+      <a href="https://github.com/rohannbat" class="btn btn-ghost" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/rohan-batra-3142b9239/" class="btn btn-ghost" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">LinkedIn ↗</a>
     </div>
   </section>
 
